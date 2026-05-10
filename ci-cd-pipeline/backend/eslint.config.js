@@ -13,8 +13,21 @@ module.exports = [
         process: 'readonly',
         __dirname: 'readonly',
         exports: 'readonly',
+        console: 'readonly',
       },
     },
     rules: {},
+  },
+  {
+    files: ['test/**/*.js'],
+    languageOptions: {
+      globals: {
+        test: 'readonly',
+        expect: 'readonly',
+        describe: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+      },
+    },
   },
 ];
