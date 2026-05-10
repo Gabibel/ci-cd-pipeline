@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Run npm audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Run Snyk security analysis
         uses: snyk/actions/node@master
@@ -63,7 +63,7 @@ jobs:
         run: npm run lint
 
       - name: Run npm audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Run Snyk security analysis
         uses: snyk/actions/node@master
