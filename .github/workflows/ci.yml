@@ -1,0 +1,77 @@
+name: CI - Pull Request to dev
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  backend-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ci-cd-pipeline/backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+
+      - name: Run Snyk security analysis
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build Docker image (backend)
+        run: docker build -t backend-test .
+
+  frontend-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ci-cd-pipeline/frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+
+      - name: Run Snyk security analysis
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run tests
+        run: npm test -- --watchAll=false
+
+      - name: Build Docker image (frontend)
+        run: docker build -t frontend-test .
